@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import drizzleOptions from '../services/drizzleOptions';
+import drizzleVuePlugin from '@drizzle/vue-plugin';
 
 // import example from './module-example'
 
@@ -24,6 +26,8 @@ export default function (/* { ssrContext } */) {
     // for dev mode only
     strict: process.env.DEBUGGING
   })
+
+  Vue.use(drizzleVuePlugin, { store: Store, drizzleOptions })
 
   return Store
 }
