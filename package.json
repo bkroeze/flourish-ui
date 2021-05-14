@@ -14,10 +14,14 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
+    "apexcharts": "^3.26.2",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
+    "date-fns": "^2.21.3",
+    "papaparse": "^5.3.0",
     "quasar": "^1.0.0",
     "ramda": "^0.27.1",
+    "vue-apexcharts": "^1.6.1",
     "vuethereum": "^0.0.7"
   },
   "devDependencies": {
