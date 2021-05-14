@@ -1,9 +1,11 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import Vuethereum from 'vuethereum'
 
 // import example from './module-example'
 
 Vue.use(Vuex)
+Vue.use(Vuethereum)
 
 /*
  * If not building with SSR mode, you can

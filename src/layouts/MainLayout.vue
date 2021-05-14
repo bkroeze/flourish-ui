@@ -15,7 +15,7 @@
           Flourish.Finance
         </q-toolbar-title>
 
-        <div>(connect wallet)</div>
+        <div><WalletStatus /></div>
       </q-toolbar>
     </q-header>
 
@@ -47,7 +47,8 @@
 </template>
 
 <script>
-import EssentialLink from 'components/EssentialLink.vue'
+ import EssentialLink from 'components/EssentialLink.vue'
+ import WalletStatus from 'components/WalletStatus.vue'
 
 const linksData = [
   {
@@ -66,7 +67,7 @@ const linksData = [
 
 export default {
   name: 'MainLayout',
-  components: { EssentialLink },
+  components: { EssentialLink, WalletStatus },
   data () {
     return {
       leftDrawerOpen: false,
