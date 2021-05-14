@@ -30,6 +30,21 @@
           header
           class="text-grey-8"
         >
+          Site Sections
+        </q-item-label>
+        <RoutedLink
+          to="aave"
+          title="Aave"
+          icon="money"
+          caption="Historical Graphs and Data"
+        />
+      </q-list>
+      
+      <q-list>
+        <q-item-label
+          header
+          class="text-grey-8"
+        >
           Essential Links
         </q-item-label>
         <EssentialLink
@@ -47,31 +62,42 @@
 </template>
 
 <script>
- import EssentialLink from 'components/EssentialLink.vue'
- import WalletStatus from 'components/WalletStatus.vue'
+import EssentialLink from 'components/EssentialLink.vue'
+import RoutedLink from 'components/RoutedLink.vue'
+import WalletStatus from 'components/WalletStatus.vue'
 
 const linksData = [
   {
-    title: 'Github',
-    caption: 'github.com/bkroeze/flourish-ui',
-    icon: 'code',
-    link: 'https://github.com/bkroeze/flourish-ui'
+  title: 'Github',
+  caption: 'github.com/bkroeze/flourish-ui',
+  icon: 'code',
+  link: 'https://github.com/bkroeze/flourish-ui'
   },
   {
-    title: 'Bruce\'s Twitter',
-    caption: '@CryptoArchon',
-    icon: 'rss_feed',
-    link: 'https://twitter.com/cryptoarchon'
+  title: 'Bruce\'s Twitter',
+  caption: '@CryptoArchon',
+  icon: 'rss_feed',
+  link: 'https://twitter.com/cryptoarchon'
   }
-];
+  ];
+
+  const routedLinks = [
+  {
+  title: 'Aave Stats',
+  caption: 'Historical data for Aave',
+  icon: 'money',
+  to: 'aave'
+  },
+  ]
 
 export default {
   name: 'MainLayout',
-  components: { EssentialLink, WalletStatus },
+  components: { EssentialLink, RoutedLink, WalletStatus },
   data () {
     return {
       leftDrawerOpen: false,
-      essentialLinks: linksData
+      essentialLinks: linksData,
+      routedLinks: routedLinks,
     }
   }
 }

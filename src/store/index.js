@@ -1,11 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import Vuethereum from 'vuethereum'
-
+import VueApexCharts from 'vue-apexcharts'
 // import example from './module-example'
 
 Vue.use(Vuex)
 Vue.use(Vuethereum)
+Vue.use(VueApexCharts)
+Vue.component('apexchart', VueApexCharts)
 
 /*
  * If not building with SSR mode, you can
