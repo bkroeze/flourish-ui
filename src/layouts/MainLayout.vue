@@ -15,9 +15,7 @@
           Flourish.Finance
         </q-toolbar-title>
 
-        <div>
-          <MultichainWallet units="ether" />
-        </div>
+        <div>(connect wallet)</div>
       </q-toolbar>
     </q-header>
 
@@ -49,32 +47,31 @@
 </template>
 
 <script>
- import EssentialLink from 'components/EssentialLink.vue'
- import MultichainWallet from 'components/MultichainWallet.vue'
- 
- const linksData = [
-   {
-     title: 'Github',
-     caption: 'github.com/bkroeze/flourish-ui',
-     icon: 'code',
-     link: 'https://github.com/bkroeze/flourish-ui'
-   },
-   {
-     title: 'Bruce\'s Twitter',
-     caption: '@CryptoArchon',
-     icon: 'rss_feed',
-     link: 'https://twitter.com/cryptoarchon'
-   }
- ];
+import EssentialLink from 'components/EssentialLink.vue'
 
- export default {
-   name: 'MainLayout',
-   components: { EssentialLink, MultichainWallet },
-   data () {
-     return {
-       leftDrawerOpen: false,
-       essentialLinks: linksData
-     }
-   }
- }
+const linksData = [
+  {
+    title: 'Github',
+    caption: 'github.com/bkroeze/flourish-ui',
+    icon: 'code',
+    link: 'https://github.com/bkroeze/flourish-ui'
+  },
+  {
+    title: 'Bruce\'s Twitter',
+    caption: '@CryptoArchon',
+    icon: 'rss_feed',
+    link: 'https://twitter.com/cryptoarchon'
+  }
+];
+
+export default {
+  name: 'MainLayout',
+  components: { EssentialLink },
+  data () {
+    return {
+      leftDrawerOpen: false,
+      essentialLinks: linksData
+    }
+  }
+}
 </script>
