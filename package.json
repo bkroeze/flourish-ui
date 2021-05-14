@@ -17,6 +17,7 @@
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "quasar": "^1.0.0",
+    "ramda": "^0.27.1",
     "vuethereum": "^0.0.7"
   },
   "devDependencies": {
