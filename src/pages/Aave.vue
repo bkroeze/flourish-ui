@@ -116,7 +116,7 @@
        console.log('loaded history');
      };
 
-     const url = process.env.NODE_ENV === 'production' ? 'https://api.flourish.finance/aave_historical_rates.csv'
+     const url = process.env.NODE_ENV === 'production' ? 'https://api.flourish.finance/aave/aave_historical_rates.csv'
                             : 'http://localhost:8000/historical_rates.csv'
                         Papa.parse(url, {
                           header: true,
