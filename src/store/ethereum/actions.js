@@ -17,9 +17,11 @@ const log = getLogger('ethereum/actions');
 
 export default {
   async connect(ctx) {
+    log.info('connect')
     try {
       const oldAddress = ctx.state.address
       const oldNetwork = ctx.state.network
+      log.debug({oldAddress, oldNetwork});
 
       const provider = getProvider()
       if (!provider) throw new Error(MSGS.NOT_CONNECTED)
@@ -27,9 +29,12 @@ export default {
       const wallet = getWallet()
       if (!wallet) throw new Error(MSGS.NO_WALLET)
       const address = await getWalletAddress()
-      const network = await getNetworkInfo()
+      const network = getNetworkInfo()
+
+      log.info({network, address});
 
       if (network !== oldNetwork || address !== oldAddress) {
+        log.info('Network change')
         ctx.commit('connected', true)
         ctx.commit('error', null)
         ctx.commit('address', address)
@@ -70,10 +75,12 @@ export default {
         */
       }
     } catch (err) {
+      log.error({context: 'connecting - will now disconnect', err});
       ctx.dispatch('disconnect', err)
     }
   },
   async disconnect(ctx, err) {
+    log.info('disconnect');
     const oldAddress = ctx.state.address
     ctx.commit('connected', false)
     ctx.commit('error', err)
@@ -90,11 +97,13 @@ export default {
     
   },
   async logout(ctx) {
+    log.info('logout');
     ctx.commit('address', '')
     ctx.commit('user', '')
     log.info({msg: 'You have been logged out from your Ethereum connection'})
   },
   async notConnected(ctx) {
+    log.info('notConnected');
     ctx.commit('address', '')
     ctx.commit('user', '')
     log.info({msg: 'You are not connected to the Ethereum network. Please check MetaMask,etc.'})
@@ -121,11 +130,11 @@ export default {
     })
 
     if (ready()) {
-      log.debug('Ready - connecting')
+      log.info('Ready - connecting')
       await ctx.dispatch('connect')
       event.$emit(EVENT_CHANNEL, MSGS.ETHERS_VUEX_INITIALIZED)
     }
-    log.debug('Initialized');
+    log.info('Initialized');
     ctx.commit('initialized', true)
   }
 }

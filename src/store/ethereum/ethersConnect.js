@@ -56,7 +56,9 @@ function getEthereum() {
 
 function ethereumOk() {
   const em = getEthereum()
-  return em && em.isConnected()
+  const connected = em && em.isConnected()
+  if (!connected) log.info({ethereum: !!em, connected: connected, ctx: 'ethereumOK'})
+  return connected
 }
 
 export function getNetworkInfo() {
@@ -107,6 +109,18 @@ export async function getWalletAddress() {
   return addr
 }
 
+export function setChainId(rawId) {
+  let cID = rawId;
+  try {
+    cID = parseInt(Number(rawId), 10)
+  } catch {
+    log.warn({msg: `Could not parse ID to int: ${ethereum.chainId}`});
+  }
+  chainId = cID
+  log.info({chainId, msg: 'set ChainId'});
+  return chainId
+}
+
 export function ready() {
   return !!provider && !!userWallet
 }
@@ -114,12 +128,19 @@ export function ready() {
 export async function startProviderWatcher() {
   // this should only be run when a ethereum provider is detected and set at the ethereum value above
   async function updateProvider() {
+    log.info('updateProvider');
     try {
       ethereum = getEthereum()
-      if (!ethereum) return
-      // set ethers provider
+      if (!ethereum) {
+        log.info('No Ethereum provider found yet')
+        return
+      }
+      // set ethers provider - old skool - deprecated
+      // await ethereum.enable()
       provider = new providers.Web3Provider(ethereum)
+      log.info({provider, ctx: 'updateProvider'})
       initialized = true
+
 
       // this is modeled after EIP-1193 example provided by MetaMask for clarity and consistency
       // but works for all EIP-1193 compatible ethereum providers
@@ -131,15 +152,7 @@ export async function startProviderWatcher() {
 
       // Normally, we would recommend the 'eth_chainId' RPC method, but it currently
       // returns incorrectly formatted chain ID values.
-      const rawId = ethereum.chainId
-      try {
-        chainId = parseInt(Number(rawId), 10)
-      } catch {
-        log.warn({msg: `Could not parse ID to int: ${ethereum.chainId}`});
-        chainId = ethereum.chainId
-      }
-     
-      log.info(`ChainID now: ${chainId}`)
+      setChainId(ethereum.chainId)
 
       ethereum.on('chainChanged', handleChainChanged)
 
@@ -147,8 +160,10 @@ export async function startProviderWatcher() {
       /* Handle user accounts and accountsChanged (per EIP-1193) */
       /***********************************************************/
 
-      const accounts = await ethereum.request({ method: 'eth_accounts' })
-      log.info({ctx: 'updateProvider', accounts});
+      /* const acctsProvider = await provider.listAccounts()
+       * log.info({ctx: 'updateProvider', acctsProvider, msg: 'alt method'}) */
+      const accounts = await ethereum.request({ method: 'eth_requestAccounts' })
+      log.info({ctx: 'updateProvider', accounts, msg: 'retrieved accounts'})
       await handleAccountsChanged(accounts)
       // Note that this event is emitted on page load.
       // If the array of accounts is non-empty, you're already
@@ -166,6 +181,7 @@ export async function startProviderWatcher() {
   function checkProvider() {
     // handle changes of availability of ethereum provider
     if (ethereum && !ethereumOk()) {
+      log.info('We have ethereum, but not connected yet');
       ethereum = null
       provider = null
       chainId = null
@@ -186,12 +202,7 @@ export async function startProviderWatcher() {
 function handleChainChanged(_chainId) {
   // We recommend reloading the page, unless you must do otherwise
   log.info({msg: 'Ethereum chain changed. Reloading as recommended.'});
-  try {
-    chainId = parseInt(Number(_chainId), 10)
-  } catch {
-    log.warn({msg: `Could not parse ID to int: ${_chainId}`});
-    chainId = _chainId
-  }
+  setChainId(_chainId)
   window.location.reload()
 }
 
