@@ -1,11 +1,16 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import Vuethereum from 'vuethereum'
 import VueApexCharts from 'vue-apexcharts'
-// import example from './module-example'
+import Cryptoicon from 'vue-cryptoicon'
+import icon from 'vue-cryptoicon/src/icons';
+// modules
+import Ethereum from './ethereum'
 
 Vue.use(Vuex)
-Vue.use(Vuethereum)
+
+Cryptoicon.add(icon);
+Vue.use(Cryptoicon);
+
 Vue.use(VueApexCharts)
 Vue.component('apexchart', VueApexCharts)
 
@@ -21,7 +26,7 @@ Vue.component('apexchart', VueApexCharts)
 export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
-      // example
+      eth: Ethereum
     },
 
     // enable strict mode (adds overhead!)

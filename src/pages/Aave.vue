@@ -113,16 +113,14 @@
    mounted() {
      const complete = (results) => {
        this.allSeries = this.parseRawCSV(results);
-       console.log('loaded history');
      };
 
-     const url = process.env.NODE_ENV === 'production' ? 'https://api.flourish.finance/aave/aave_historical_rates.csv'
-                            : 'http://localhost:8000/historical_rates.csv'
-                        Papa.parse(url, {
-                          header: true,
-                          download: true,
-                          complete
-                        })
+     const url = process.env.AAVE_RATES_URL;
+     Papa.parse(url, {
+       header: true,
+       download: true,
+       complete
+     })
    }
 }
 </script>

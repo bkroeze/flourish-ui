@@ -15,7 +15,7 @@
           Flourish.Finance
         </q-toolbar-title>
 
-        <div><WalletStatus /></div>
+        <div><EthWalletStatus /></div>
       </q-toolbar>
     </q-header>
 
@@ -33,10 +33,23 @@
           Site Sections
         </q-item-label>
         <RoutedLink
-          to="aave"
+          to="/aave"
           title="Aave"
-          icon="money"
+          icon="mdi-chart-bell-curve-cumulative"
           caption="Historical Graphs and Data"
+        />
+        <RoutedLink
+          append-account
+          to="/account/"
+          title="DeFI Accounts"
+          icon="mdi-wallet-outline"
+          caption="Current balance, health"
+        />
+        <RoutedLink
+          to="/tarot"
+          title="Tarot"
+          icon="mdi-cards-playing-outline"
+          caption="Tarot Dealer"
         />
       </q-list>
       
@@ -64,19 +77,19 @@
 <script>
 import EssentialLink from 'components/EssentialLink.vue'
 import RoutedLink from 'components/RoutedLink.vue'
-import WalletStatus from 'components/WalletStatus.vue'
+import EthWalletStatus from 'components/EthWalletStatus.vue'
 
-const linksData = [
-  {
-  title: 'Github',
-  caption: 'github.com/bkroeze/flourish-ui',
-  icon: 'code',
-  link: 'https://github.com/bkroeze/flourish-ui'
-  },
-  {
+ const linksData = [
+   {
+     title: 'Github',
+     caption: 'github.com/bkroeze/flourish-ui',
+     icon: 'mdi-github',
+     link: 'https://github.com/bkroeze/flourish-ui'
+   },
+   {
   title: 'Bruce\'s Twitter',
   caption: '@CryptoArchon',
-  icon: 'rss_feed',
+  icon: 'mdi-twitter',
   link: 'https://twitter.com/cryptoarchon'
   }
   ];
@@ -92,7 +105,7 @@ const linksData = [
 
 export default {
   name: 'MainLayout',
-  components: { EssentialLink, RoutedLink, WalletStatus },
+  components: { EssentialLink, RoutedLink, EthWalletStatus },
   data () {
     return {
       leftDrawerOpen: false,
@@ -100,5 +113,5 @@ export default {
       routedLinks: routedLinks,
     }
   }
-}
+ }
 </script>

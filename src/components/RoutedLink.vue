@@ -41,7 +41,19 @@ export default {
     icon: {
       type: String,
       default: ''
+    },
+    appendAccount: {
+      type: Boolean,
+      default: false
     }
-  }
+  },
+   computed: {
+     url: function() {
+       if (!this.props.appendAccount) {
+         return this.props.to
+       }
+       return `${this.props.to}/${web3.account}`
+     }
+   }
 }
 </script>
