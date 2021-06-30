@@ -1,5 +1,6 @@
 export const rws0 = {
-  address: process.env.CONTRACT_RWS0,
+  name: "Rider-Waite-Smith Tarot - LoRez 0.1",
+  address: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",  //`"${process.env.CONTRACT_RWS0}"`,
   abi: [
     {
       "inputs": [

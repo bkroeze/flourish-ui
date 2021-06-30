@@ -11,13 +11,10 @@
 
       <q-card-actions align="around">
         <q-btn
-          :disabled="!user"
-          @click="deal(decRWS0)"
+          :disabled="!deck"
+          @click="deal"
         >Deal 1 Card</q-btn>
-        <q-chip
-          size="sm" icon="mdi-hand-heart-outline"
-          :title="contract"
-        >1 MATIC</q-chip>
+        <q-chip size="sm" icon="mdi-hand-heart-outline">1 MATIC</q-chip>
       </q-card-actions>
     </q-card-section>
 </template>
@@ -27,15 +24,10 @@ import { Contract } from 'ethers'
  
  export default {
    name: 'CardDealer',
-   props: ['contract', 'wallet'],
-   computed: {
-     deckRWS0: function () {
-       return this.userWallet ? new Contract(this.contract.address, this.contract.abi, this.wallet) : null;
-     }
-   },
+   props: ['deck'],
    methods: {
-     deal: (contract) => {
-       console.log(`Deal: ${contract}`);
+     deal: function() {
+       console.log('Deal', this.deck);
      }
    },
    data () {

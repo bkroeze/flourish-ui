@@ -10,10 +10,7 @@
       <div class="col-3">
         <div class="text-h5 text-secondary">Deck</div>
         <q-card class="active-deck bg-secondary text-white">
-          <CardDealer
-            :contract="contracts.rws0"
-            :wallet="userWallet"
-          >
+          <CardDealer :deck="rws0">
             <div slot="title" class="text-h6">Rider-Waite-Smith Tarot</div>
             <div slot="subtitle" class="text-subtitle2">LoRez - v0.1.</div>
             <div slot="description">
@@ -31,27 +28,62 @@
           v-bind="card"
           :key="card.index"
         />
+        <div>
+          <p>User: <pre>{{ user }}</pre></p>
+        </div>
+        
       </div>
     </div>
   </q-page>
 </template>
 
 <script>
+ import { Contract } from 'ethers';
  import CardDisplay from 'components/CardDisplay.vue'
  import CardDealer from 'components/CardDealer.vue'
  import { mapState } from 'vuex'
  import contracts from '../config/contracts'
+ import { getWallet } from '../store/ethereum/ethersConnect';
+
+ // TODO: figure out how to get the wallet when I want to work on things
  
  export default {
    name: 'TarotDealer',
    components: { CardDisplay, CardDealer },
    computed: {
-     ...mapState('eth', ['user', 'provider', 'userWallet'])
+     ...mapState('eth', ['user', 'address'])
+   },
+   methods: {
+     attachContracts: function(address) {
+       if (!address) {
+         console.log('removing rws0 contract - no address')
+         this.rws0 = null;
+       } else {
+         const self = this;
+         this.wallet = getWallet();
+         console.log('wallet', this.wallet._isSigner)
+         const { rws0 } = contracts;
+         this.rws0 = new Contract(rws0.address, rws0.abi, this.wallet);
+         console.log('contract complete');
+       }
+     },
+     inspect: function inspect(val) {
+       return `[${JSON.stringify(val, null, 2)}]`
+     },
+   },
+   watch: {
+     address: function(newAddress, oldAddress) {
+       if (newAddress !== oldAddress) {
+         this.attachContracts(newAddress);
+       }
+     }
    },
    data () {
      return {
+       rws0: null,
        ownedCards: [],
-       contracts
+       contracts,
+       wallet: null
      }
    },
 }
