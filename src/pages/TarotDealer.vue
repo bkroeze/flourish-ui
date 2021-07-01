@@ -10,7 +10,7 @@
       <div class="col-3">
         <div class="text-h5 text-secondary">Deck</div>
         <q-card class="active-deck bg-secondary text-white">
-          <CardDealer :deck="rws0">
+          <CardDealer :deck="rws0" :network="network">
             <div slot="title" class="text-h6">Rider-Waite-Smith Tarot</div>
             <div slot="subtitle" class="text-subtitle2">LoRez - v0.1.</div>
             <div slot="description">
@@ -51,7 +51,7 @@
    name: 'TarotDealer',
    components: { CardDisplay, CardDealer },
    computed: {
-     ...mapState('eth', ['user', 'address'])
+     ...mapState('eth', ['user', 'address', 'network'])
    },
    methods: {
      attachContracts: function(address) {
