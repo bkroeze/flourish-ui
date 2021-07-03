@@ -1,6 +1,6 @@
 export const rws0 = {
   name: "Rider-Waite-Smith Tarot - LoRez 0.1",
-  address: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",  //`"${process.env.CONTRACT_RWS0}"`,
+  address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
   abi: [
     {
       "inputs": [
@@ -144,19 +144,6 @@ export const rws0 = {
       "type": "event"
     },
     {
-      "inputs": [],
-      "name": "_drawPrice",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
       "inputs": [
         {
           "internalType": "address",
@@ -233,6 +220,19 @@ export const rws0 = {
           "internalType": "address",
           "name": "",
           "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getDeckSize",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "size",
+          "type": "uint256"
         }
       ],
       "stateMutability": "view",

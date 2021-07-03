@@ -25,6 +25,9 @@
 
 <script>
  import { utils } from 'ethers';
+ import { getLogger } from '../config/logger'
+
+ const log = getLogger('CardDealer')
  
  export default {
    name: 'CardDealer',
@@ -37,18 +40,21 @@
            value: price
          })
          .then((gasLimit) => {
-           console.log(gasLimit);
-           deck.dealCard({
+           log.info({ctx: 'deal', gasLimit: utils.formatUnits(gasLimit, 'gwei')})
+           return deck.dealCard({
              value: price,
              gasLimit: gasLimit
-           });
-         });     
+           })
+         })
+         .then((rv) => {
+           log.info({ctx: 'deal', msg: 'complete', rv});
+         })
      },
      readDeck: async function(deck) {
-       console.log('reading deck');
+       log.info('reading deck');
        this.remaining = await deck.remaining();
        this.price = await deck.getPrice();
-       // todo - do card loading here for owner
+       this.totalCards = await deck.getDeckSize();
      },
      formatUnits: utils.formatUnits
    },
@@ -63,7 +69,7 @@
      return {
        price: '?',
        remaining: 'Loading ...',
-       totalCards: '78'
+       totalCards: 'Loading ...'
      }
    }
  }

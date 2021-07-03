@@ -21,17 +21,15 @@
           </CardDealer>
         </q-card>
       </div>
-      <div class="col-5 offset-1">
+      <div class="col-8 offset-1">
         <div class="text-h5 text-secondary">Your Cards</div>
+        <div class="row">
         <CardDisplay
           v-for="card in ownedCards"
           v-bind="card"
           :key="card.index"
         />
-        <div>
-          <p>User: <pre>{{ user }}</pre></p>
         </div>
-        
       </div>
     </div>
   </q-page>
@@ -44,8 +42,10 @@
  import { mapState } from 'vuex'
  import contracts from '../config/contracts'
  import { getWallet } from '../store/ethereum/ethersConnect';
+ import { getMetadata, urlFormat } from '../util/nfts';
+ import { getLogger } from '../config/logger';
 
- // TODO: figure out how to get the wallet when I want to work on things
+ const log = getLogger('TarotDealer');
  
  export default {
    name: 'TarotDealer',
@@ -54,22 +54,65 @@
      ...mapState('eth', ['user', 'address', 'network'])
    },
    methods: {
-     attachContracts: function(address) {
+     attachContracts: function attachContracts(address) {
        if (!address) {
-         console.log('removing rws0 contract - no address')
-         this.rws0 = null;
+         log.warn('removing rws0 contract - no address')
+         this.rws0 = null
        } else {
-         const self = this;
-         this.wallet = getWallet();
-         console.log('wallet', this.wallet._isSigner)
-         const { rws0 } = contracts;
-         this.rws0 = new Contract(rws0.address, rws0.abi, this.wallet);
-         console.log('contract complete');
+         const self = this
+         this.wallet = getWallet()
+         const { rws0 } = contracts
+         const rws0Contract = new Contract(rws0.address, rws0.abi, this.wallet);
+         this.rws0 = rws0Contract
+         rws0Contract.on("Card", (owner, uri, index) => {
+           log.info({ctx: 'Card event', owner, uri, index});
+           if (owner === address) {
+             log.info('reloading deck');
+             self.readDeck(rws0Contract)
+           }
+         })
+         this.readDeck(rws0Contract);
        }
      },
      inspect: function inspect(val) {
        return `[${JSON.stringify(val, null, 2)}]`
      },
+     readDeck: async function readDeck(deck) {
+       const status = {ctx: 'readDeck', deck: deck.address}
+       log.info(status)
+       // get owned cards
+       const ownedCt = await deck.balanceOf(this.address)
+       log.info({ ...status, owned: ownedCt.toNumber() });
+       const owned = [];
+       let card;
+       for (let ix = 0; ix < ownedCt; ix++) {
+         card = await this.readCard(deck, ix)
+         if (card) owned.push(card);
+       }
+       this.ownedCards = owned;
+     },
+     readCard: async function readCard(deck, ix) {
+       const status = {ctx: 'readCard', card: ix}
+       log.info(status)
+       try {
+         const tokenId = await deck.tokenOfOwnerByIndex(this.address, ix)
+         const uri = await deck.tokenURI(tokenId)
+         const meta = await getMetadata(uri)
+         log.debug({ ...status, meta})
+         const card = {
+           index: ix,
+           tokenId,
+           uri,
+           meta,
+           image: urlFormat(meta.image)
+         }
+         log.info({ ...status, card })
+         return card
+       } catch (err) {
+         console.error(err);
+       }1
+       return null
+     }
    },
    watch: {
      address: function(newAddress, oldAddress) {

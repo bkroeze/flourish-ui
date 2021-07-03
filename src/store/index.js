@@ -2,14 +2,14 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import VueApexCharts from 'vue-apexcharts'
 import Cryptoicon from 'vue-cryptoicon'
-import icon from 'vue-cryptoicon/src/icons';
+import icon from 'vue-cryptoicon/src/icons'
 // modules
 import Ethereum from './ethereum'
 
 Vue.use(Vuex)
 
-Cryptoicon.add(icon);
-Vue.use(Cryptoicon);
+Cryptoicon.add(icon)
+Vue.use(Cryptoicon)
 
 Vue.use(VueApexCharts)
 Vue.component('apexchart', VueApexCharts)
