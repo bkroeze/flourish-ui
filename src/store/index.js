@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import logger from '../config/logger'
 import VueApexCharts from 'vue-apexcharts'
 import Cryptoicon from 'vue-cryptoicon'
 import icon from 'vue-cryptoicon/src/icons'
@@ -7,7 +8,7 @@ import icon from 'vue-cryptoicon/src/icons'
 import Ethereum from './ethereum'
 
 Vue.use(Vuex)
-
+Vue.use(logger)
 Cryptoicon.add(icon)
 Vue.use(Cryptoicon)
 

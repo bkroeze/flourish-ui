@@ -45,12 +45,6 @@
           icon="mdi-wallet-outline"
           caption="Current balance, health"
         />
-        <RoutedLink
-          to="/tarot"
-          title="Tarot"
-          icon="mdi-cards-playing-outline"
-          caption="Tarot Dealer"
-        />
       </q-list>
       
       <q-list>

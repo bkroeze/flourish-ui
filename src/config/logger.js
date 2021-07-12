@@ -1,6 +1,10 @@
-const Pino = require('pino')();
+import { createLogger, StringifyObjectsHook } from 'vue-logger-plugin'
 
-Pino.level = process.env.FLOURISH_LOGLEVEL || 'debug'
+// create logger with options
+const logger = createLogger({
+  enabled: true,
+  level: 'debug',
+  beforeHooks: [ StringifyObjectsHook ]
+})
 
-export const getLogger = (name) => Pino.child({module: name});
-
+export default logger

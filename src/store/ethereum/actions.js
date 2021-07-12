@@ -8,12 +8,9 @@ import {
   getProvider,
   getWallet,
   getWalletAddress,
-  getNetworkInfo,
-  hasEns
 } from './ethersConnect'
-
-import { getLogger } from '../../config/logger';
-const log = getLogger('ethereum/actions');
+import { getNetworkInfo } from '../../config/chains'
+import log from '../../config/logger';
 
 export default {
   async connect(ctx) {
@@ -40,28 +37,12 @@ export default {
         ctx.commit('address', address)
         ctx.commit('user', address)
         ctx.commit('network', network)
-
-        const msg = oldAddress && oldAddress !== address
-          ? `Your Ethereum address/user has changed.
-          Address: ${address}
-          Network: ${network.name}
-          Gas Price: ${await provider.getGasPrice()}
-          Current Block #: ${await provider.getBlockNumber()}
-          Your ether balance: ${await provider.getBalance(address)}`
-          : `You are connected to the Ethereum Network.
-          Address: ${address}
-          Network: ${network.name}
-          Gas Price: ${await provider.getGasPrice()}
-          Current Block #: ${await provider.getBlockNumber()}
-          Your ether balance: ${await provider.getBalance(address)}
-          If you change your address or network, this app will update automatically.`
-        log.info({msg})
-
+        log.info('Network address has changed');
         // Other vuex stores can wait for this
         event.$emit(EVENT_CHANNEL, MSGS.ETHERS_VUEX_READY)
 
         // now check for .eth address too
-        if (await hasEns()) {
+        if (network.ens) {
           console.log('Net supports ENS. Checking...')
           ctx.commit('ens', await provider.lookupAddress(address))
           if (ctx.state.ens) {

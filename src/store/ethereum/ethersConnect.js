@@ -5,17 +5,11 @@ import {
   Contract as ContractModule,
   utils as utilsModule
 } from 'ethers'
-import { getLogger } from '../../config/logger'
-import chains from '../../config/chains.json'
-import testChains from '../../config/testChains.json'
+import { getNetworkInfo } from '../../config/chains'
 import * as R from 'ramda';
-
-const log = getLogger('ethereum/ethersConnect')
+import log from '../../config/logger'
 
 export const PROVIDER_CHECK_MS = 500
-// networks where ens exists
-// Mainet, Ropsten, Ropsten
-export const ENS_NETS = ['0x1', '0x3', '0x4']
 
 // messages
 export const MSGS = {
@@ -26,6 +20,7 @@ export const MSGS = {
   ETHERS_VUEX_INITIALIZED: 'Ethers vuex module initialized',
   ETHERS_VUEX_READY: 'Ethers vuex module ready'
 }
+
 export const EVENT_CHANNEL = 'ethers'
 // use vue as a simple event channel
 export const event = new Vue()
@@ -59,35 +54,6 @@ function ethereumOk() {
   const connected = em && em.isConnected()
   if (!connected) log.info({ethereum: !!em, connected: connected, ctx: 'ethereumOK'})
   return connected
-}
-
-export function getNetworkInfo() {
-  if (chainId === null) {
-    return {name: "Not Connected"}
-  }
-  const finder = R.find(R.propEq('chainId', chainId))
-  
-  let info = finder(chains)
-  if (!info) {
-    info = finder(testChains)
-  }
-  return info || {
-    "name": "Unknown",
-    "chainId": chainId,
-    "shortName": "unk",
-    "chain": "???",
-    "network": "unk",
-    "networkId": `${chainId}`,
-    "nativeCurrency": {"name":"Unknown","symbol":"???","decimals":18},
-    "rpc": [],
-    "faucets": [],
-    "explorers": [],
-  }
-}
-
-// if this net has ens
-export async function hasEns() {
-  return ENS_NETS.includes(chainId)
 }
 
 // get deployed address for a contract from its networks object and current network id or null
@@ -264,8 +230,6 @@ startProviderWatcher()
 export default {
   connect,
   ethereumOk,
-  getNetworkInfo,
-  hasEns,
   getProvider,
   getWallet,
   getWalletAddress,
